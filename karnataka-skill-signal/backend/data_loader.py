@@ -11,8 +11,8 @@ import numpy as np
 from pathlib import Path
 
 # ── Data directory ─────────────────────────────────────────────────────────────
-# Default: two levels up from this file → workspace root, where the CSVs live.
-_default_data_dir = Path(__file__).resolve().parent.parent.parent
+# Default: <project_root>/data/  (sits next to backend/ and frontend/)
+_default_data_dir = Path(__file__).resolve().parent.parent / "data"
 DATA_DIR = Path(os.environ.get("DATA_DIR", str(_default_data_dir)))
 
 # ── File-name registry ─────────────────────────────────────────────────────────
