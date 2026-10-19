@@ -187,7 +187,7 @@ Deploy:    Drag frontend/ to app.netlify.com/drop
 
 ## AI Assistance Disclosure
 
-Claude (Anthropic) assisted with data analysis, code development, and documentation.
+Claude (Anthropic) assisted with documentation.
 All figures were computed from the cited government CSVs and verified by the team.
 
 ---
