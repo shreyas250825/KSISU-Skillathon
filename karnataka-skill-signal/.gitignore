@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+*.pyc
+
+# Environment
+.env
+.env.local
+*.env
+
+# Data files (large government CSVs — place manually, do not commit)
+data/*.csv
+*.csv
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.idea/
+.vscode/
+*.suo
+*.sln.docstats
+
+# Logs
+*.log

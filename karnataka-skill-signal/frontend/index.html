@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karnataka Skill Signal — KSISU Skillathon 2026</title>
+  <meta name="description" content="An explainable labour market intelligence system for evidence-based skill planning in Karnataka. KSISU Skillathon 2026.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- API base — set to a live backend URL when one is available.
+       Leave as empty string to use the embedded data bundle only. -->
+  <script>
+    window.KSS_API_BASE = "";  // no backend on Netlify; data_bundle.js is used instead
+  </script>
+</head>
+<body>
+
+<!-- ── Navigation ─────────────────────────────────────────────────────────── -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="container nav__inner">
+    <div class="nav__brand">
+      <div class="nav__logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 5-5"/>
+        </svg>
+      </div>
+      <div class="nav__brand-text">
+        <strong>Karnataka Skill Signal</strong>
+        <span>KSISU Skillathon 2026</span>
+      </div>
+    </div>
+
+    <ul class="nav__links" role="list">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#dashboard">Analytics</a></li>
+      <li><a href="#quality">Data Quality</a></li>
+      <li><a href="#methodology">Methodology</a></li>
+      <li><a href="#districts">Explorer</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+
+    <button class="nav__toggle" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ── Hero ───────────────────────────────────────────────────────────────── -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero__inner">
+      <div class="hero__content">
+        <div class="hero__eyebrow">
+          <span class="eyebrow">KSISU Skillathon 2026 · Labour Market Intelligence</span>
+        </div>
+
+        <h1 class="display-heading hero__title">
+          Skills planning should begin with <em>evidence.</em>
+        </h1>
+
+        <p class="hero__sub">
+          Karnataka Skill Signal brings fragmented public data into one transparent analytical
+          framework — helping policymakers explore training activity, historical workforce patterns,
+          and economic signals while clearly identifying what the evidence can and cannot establish.
+        </p>
+
+        <div class="hero__actions">
+          <a href="#dashboard" class="btn btn--primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 5-5"/></svg>
+            Explore the data
+          </a>
+          <a href="#methodology" class="btn btn--secondary">View methodology</a>
+        </div>
+
+        <div class="hero__facts" id="hero-facts">
+          <!-- Populated by JS -->
+          <div><span class="hero__fact-value skeleton" style="height:28px;display:block;width:60px;"></span></div>
+          <div><span class="hero__fact-value skeleton" style="height:28px;display:block;width:40px;"></span></div>
+          <div><span class="hero__fact-value skeleton" style="height:28px;display:block;width:80px;"></span></div>
+        </div>
+      </div>
+
+      <div class="hero__visual" aria-hidden="true">
+        <div class="hero-viz">
+          <div class="hero-viz__title">GTTC CoE Reported Counts · FY 2018–19 to 2021–22</div>
+          <div class="hero-mini-chart"><canvas id="hero-mini-canvas"></canvas></div>
+          <div class="hero-dataset-pills">
+            <span class="pill pill--green"><span class="pill__dot"></span>Training Activity</span>
+            <span class="pill pill--terra"><span class="pill__dot"></span>Historical Workforce</span>
+            <span class="pill pill--stone"><span class="pill__dot"></span>Economic Signals</span>
+          </div>
+          <div class="caption mt-sm">
+            Three evidence streams, one transparent and explainable view.
+            All figures computed from public government CSVs.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Executive Overview ──────────────────────────────────────────────────── -->
+<section class="section section--alt" id="overview">
+  <div class="container">
+    <div class="section-label">
+      <div class="section-label__num">02</div>
+      <div class="section-label__text">The Problem</div>
+    </div>
+
+    <h2 class="section-heading mb-md">
+      A clearer view of Karnataka's skill ecosystem
+    </h2>
+    <p style="max-width:640px;color:var(--text-secondary);margin-bottom:var(--gap-xl);">
+      Three kinds of evidence shape skill planning, yet they come from different periods,
+      geographies, and units — making them impossible to compare directly without a
+      transparent integration layer.
+    </p>
+
+    <div class="grid-3" id="overview-cards">
+      <!-- Populated by JS -->
+      <div class="card"><div class="skeleton" style="height:160px;"></div></div>
+      <div class="card"><div class="skeleton" style="height:160px;"></div></div>
+      <div class="card"><div class="skeleton" style="height:160px;"></div></div>
+    </div>
+
+    <div class="callout callout--warning mt-lg">
+      <strong>Central Problem:</strong> Karnataka lacks a transparent, reproducible way to bring
+      training, workforce and economic evidence together by district, sector and period.
+      Without it, possible mismatches between training and the economy are hard to examine,
+      and fragmented data invites over-interpretation.
+    </div>
+  </div>
+</section>
+
+<!-- ── Analytics Dashboard ─────────────────────────────────────────────────── -->
+<section class="section dashboard" id="dashboard">
+  <div class="container">
+    <div class="section-label">
+      <div class="section-label__num">03</div>
+      <div class="section-label__text">Real-Data Analysis</div>
+    </div>
+
+    <div class="dashboard__header flex-between mb-lg">
+      <div>
+        <h2 class="section-heading">Interactive Analytics Dashboard</h2>
+        <p class="caption mt-sm" style="max-width:580px;">
+          All charts are computed from the actual government CSV files.
+          Every visualisation shows its source, unit, and limitation.
+          Filters update results live.
+        </p>
+      </div>
+    </div>
+
+    <div id="dashboard-tabs">
+      <div class="tab-bar" role="tablist">
+        <button class="tab active" role="tab" data-panel="tab-gttc-trends" aria-selected="true">GTTC Trends</button>
+        <button class="tab" role="tab" data-panel="tab-gttc-centres">GTTC Centres</button>
+        <button class="tab" role="tab" data-panel="tab-gttc-coverage">Programme Output</button>
+        <button class="tab" role="tab" data-panel="tab-census-ind">Census Industry</button>
+        <button class="tab" role="tab" data-panel="tab-census-demo">Census Demographics</button>
+        <button class="tab" role="tab" data-panel="tab-industry">Industry Signals</button>
+        <button class="tab" role="tab" data-panel="tab-enrolment">School Enrolment</button>
+      </div>
+
+      <!-- ── Tab: GTTC Trends ── -->
+      <div id="tab-gttc-trends" class="tab-panel active" role="tabpanel">
+        <div class="flex-between mb-md">
+          <h3 style="font-size:1rem;font-weight:700;">GTTC CoE Short-term Reported Counts (I1 &amp; I2)</h3>
+          <button class="btn btn--ghost btn--xs" data-export="/api/gttc/trends/export|gttc_trends.csv">
+            ↓ Export CSV
+          </button>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-wrap__header">
+            <div>
+              <div class="chart-wrap__title">Annual Reported Count — All Centres vs. Like-for-Like Cohort</div>
+              <div class="caption">Like-for-like: 3 centres reporting every year (Mysuru, Dandeli, Kalaburgi)</div>
+            </div>
+          </div>
+          <div style="height:280px;"><canvas id="gttc-trend-chart"></canvas></div>
+          <div class="chart-wrap__source">
+            Source: GTTC_Shortterm_Courses.csv · GTTC, Govt. of Karnataka (catalogue page unverified) ·
+            FY 2018–19 to 2021–22 · Count unit not defined in data dictionary.
+          </div>
+        </div>
+        <div id="gttc-trend-table"></div>
+      </div>
+
+      <!-- ── Tab: GTTC Centres ── -->
+      <div id="tab-gttc-centres" class="tab-panel" role="tabpanel">
+        <div class="flex-between mb-md">
+          <h3 style="font-size:1rem;font-weight:700;">Centre-Level Concentration (I3)</h3>
+          <button class="btn btn--ghost btn--xs" data-export="/api/gttc/centres/export|gttc_centres.csv">
+            ↓ Export CSV
+          </button>
+        </div>
+        <div class="grid-2">
+          <div class="chart-wrap">
+            <div class="chart-wrap__title mb-md">Cumulative Reported Count by Centre (2018–19 to 2021–22)</div>
+            <div style="height:300px;"><canvas id="gttc-centres-chart"></canvas></div>
+            <div class="chart-wrap__source">
+              Colour: Dark green = Siemens-CoE · Light green = Dassault-CoE · Stone = PTC-CoE
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-wrap__title mb-md">CoE Partner Share (I3: Concentration)</div>
+            <div style="height:220px;"><canvas id="gttc-partner-chart"></canvas></div>
+            <div class="chart-wrap__source">Share = centre total ÷ 8,061 grand total</div>
+          </div>
+        </div>
+        <div id="gttc-centres-table" class="mt-md"></div>
+      </div>
+
+      <!-- ── Tab: GTTC Coverage ── -->
+      <div id="tab-gttc-coverage" class="tab-panel" role="tabpanel">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:var(--gap-md);">
+          GTTC Programme Output &amp; Data Coverage (I6)
+        </h3>
+        <div id="gttc-coverage-content">
+          <div class="skeleton" style="height:200px;"></div>
+        </div>
+      </div>
+
+      <!-- ── Tab: Census Industry ── -->
+      <div id="tab-census-ind" class="tab-panel" role="tabpanel">
+        <div class="flex-between mb-md">
+          <h3 style="font-size:1rem;font-weight:700;">Census 2011 — Marginal Workers by Industry</h3>
+          <button class="btn btn--ghost btn--xs" data-export="/api/census/industry/export|census_industry.csv">
+            ↓ Export CSV
+          </button>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-wrap__title mb-md">Marginal Workers by Industrial Category — State of Karnataka (2011)</div>
+          <div style="height:380px;"><canvas id="census-industry-chart"></canvas></div>
+          <div class="chart-wrap__source">
+            Source: census_2011_ddw_b06_2900_2011.csv · Registrar General &amp; Census Commissioner, India ·
+            2011 · Marginal workers only. NOT current employment demand.
+          </div>
+        </div>
+        <div id="census-industry-table" class="mt-md"></div>
+      </div>
+
+      <!-- ── Tab: Census Demographics ── -->
+      <div id="tab-census-demo" class="tab-panel" role="tabpanel">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:var(--gap-md);">
+          Census 2011 — Gender, Age &amp; District Profile
+        </h3>
+        <div class="grid-2 mb-lg">
+          <div class="chart-wrap">
+            <div class="chart-wrap__title mb-md">Gender Composition of Marginal Workers</div>
+            <div style="height:240px;"><canvas id="census-gender-chart"></canvas></div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-wrap__title mb-md">Top 10 Districts by Marginal Workers</div>
+            <div style="height:240px;"><canvas id="census-district-chart"></canvas></div>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-wrap__title mb-md">Age Distribution of Marginal Workers (State, Total)</div>
+          <div style="height:240px;"><canvas id="census-age-chart"></canvas></div>
+          <div class="chart-wrap__source">
+            Source: Census 2011 Table B-06 · State of Karnataka · Marginal workers only, not demand.
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Tab: Industry ── -->
+      <div id="tab-industry" class="tab-panel" role="tabpanel">
+        <div class="flex-between mb-md">
+          <h3 style="font-size:1rem;font-weight:700;">Single Window Committee — Industry Signals (FY 2020–21)</h3>
+          <button class="btn btn--ghost btn--xs" data-export="/api/industry/export|slswcc_sectors.csv">
+            ↓ Export CSV
+          </button>
+        </div>
+        <div class="chart-wrap">
+          <div class="chart-wrap__title mb-md">Listed Employment &amp; Units by Sector (Approved Projects, FY 2020–21)</div>
+          <div style="height:380px;"><canvas id="industry-sector-chart"></canvas></div>
+          <div class="chart-wrap__source">
+            Source: State_Level_Single_Window_Committee_Industrydetails_2021.csv · FY 2020–21 ·
+            Approved-project data. Listed employment ≠ realised jobs or vacancies.
+          </div>
+        </div>
+        <div id="industry-table" class="mt-md"></div>
+      </div>
+
+      <!-- ── Tab: Enrolment ── -->
+      <div id="tab-enrolment" class="tab-panel" role="tabpanel">
+        <h3 style="font-size:1rem;font-weight:700;margin-bottom:var(--gap-md);">
+          School Enrolment Context (NOT Vocational Capacity)
+        </h3>
+        <div id="enrolment-content">
+          <div class="skeleton" style="height:200px;"></div>
+        </div>
+      </div>
+
+    </div><!-- /dashboard-tabs -->
+  </div>
+</section>
+
+<!-- ── Data Quality ────────────────────────────────────────────────────────── -->
+<section class="section section--alt" id="quality">
+  <div class="container">
+    <div class="section-label">
+      <div class="section-label__num">04</div>
+      <div class="section-label__text">Data Quality</div>
+    </div>
+
+    <h2 class="section-heading mb-md">Before we trust a number</h2>
+    <p style="max-width:580px;color:var(--text-secondary);margin-bottom:var(--gap-lg);">
+      Every check below runs on the actual data files. Results are computed fresh —
+      not hard-coded. Blank cells are not converted to zero.
+    </p>
+
+    <div id="quality-summary" class="mb-lg"></div>
+
+    <div id="quality-checks">
+      <div class="skeleton" style="height:200px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Methodology ─────────────────────────────────────────────────────────── -->
+<section class="section" id="methodology">
+  <div class="container">
+    <div class="section-label">
+      <div class="section-label__num">05</div>
+      <div class="section-label__text">Methodology</div>
+    </div>
+
+    <h2 class="section-heading mb-md">
+      Six transparent indicators — what each informs and what it cannot establish
+    </h2>
+    <p style="max-width:600px;color:var(--text-secondary);margin-bottom:var(--gap-xl);">
+      No black-box scores. Every indicator cites its formula, data source, and the questions
+      it cannot answer. No composite SkillGap Index is claimed.
+    </p>
+
+    <h3 class="subsection-heading mb-md">Pipeline</h3>
+    <div id="methodology-pipeline" class="pipeline mb-xl">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="callout callout--info mb-xl">
+      <strong>Solid green:</strong> Implemented in this prototype.
+      <strong>Dashed terracotta:</strong> Proposed for production.
+      Geo-temporal harmonisation (Step 5) and Sector/Trade Mapping (Step 6) require a
+      versioned district-code crosswalk and expert-reviewed trade→sector map.
+    </div>
+
+    <h3 class="subsection-heading mb-md">Indicators</h3>
+    <div id="indicator-cards" class="indicator-grid">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="callout callout--warning mt-lg">
+      <strong>No composite index.</strong> Any composite would combine I5-type components
+      and must be validated by domain experts before use. No such validation exists here.
+      Flags are prompts for investigation, not proofs of shortage.
+    </div>
+  </div>
+</section>
+
+<!-- ── District Explorer ───────────────────────────────────────────────────── -->
+<section class="section section--alt" id="districts">
+  <div class="container">
+    <div class="section-label">
+      <div class="section-label__num">06</div>
+      <div class="section-label__text">Geographic Explorer</div>
+    </div>
+
+    <h2 class="section-heading mb-md">District &amp; Centre Explorer</h2>
+    <p style="max-width:580px;color:var(--text-secondary);margin-bottom:var(--gap-lg);">
+      Cross-source district comparison is <strong>not yet reliable</strong>: Census 2011 uses
+      30 districts with 2011 boundaries; GTTC files use city names; later enrolment files
+      reference 34 education districts. A versioned code-based crosswalk is required before
+      joining these sources. The table below is indicative only.
+    </p>
+
+    <div id="district-table">
+      <div class="skeleton" style="height:240px;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Architecture ────────────────────────────────────────────────────────── -->
+<section class="section" id="architecture">
+  <div class="container">
+    <div class="section-label">
+      <div class="section-label__num">07</div>
+      <div class="section-label__text">Technical Architecture</div>
+    </div>
+
+    <h2 class="section-heading mb-md">From public datasets to decision-makers</h2>
+    <p style="max-width:600px;color:var(--text-secondary);margin-bottom:var(--gap-xl);">
+      Human review is required before any indicator informs policy. No live government API,
+      backend portal integration, or production database is claimed for this prototype.
+    </p>
+
+    <div class="arch-diagram" role="img" aria-label="Architecture diagram">
+      <div class="arch-node arch-node--implemented">
+        <div class="arch-node__icon">📂</div>
+        <div class="arch-node__label">Public Datasets</div>
+        <div class="arch-node__sub">6 CSV files</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node arch-node--implemented">
+        <div class="arch-node__icon">⬇</div>
+        <div class="arch-node__label">Ingestion</div>
+        <div class="arch-node__sub">Manual CSV load</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node arch-node--implemented">
+        <div class="arch-node__icon">💾</div>
+        <div class="arch-node__label">Raw Storage</div>
+        <div class="arch-node__sub">Unmodified files</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node arch-node--implemented">
+        <div class="arch-node__icon">🔍</div>
+        <div class="arch-node__label">Validation &amp; Cleaning</div>
+        <div class="arch-node__sub">Python · pandas</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node arch-node--implemented">
+        <div class="arch-node__icon">⚙</div>
+        <div class="arch-node__label">Indicator Engine</div>
+        <div class="arch-node__sub">I1–I3, I6 live</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node arch-node--implemented">
+        <div class="arch-node__icon">🔗</div>
+        <div class="arch-node__label">REST API</div>
+        <div class="arch-node__sub">FastAPI · /docs</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node arch-node--implemented">
+        <div class="arch-node__icon">📊</div>
+        <div class="arch-node__label">Dashboard</div>
+        <div class="arch-node__sub">HTML · Chart.js</div>
+      </div>
+      <div class="arch-arrow">→</div>
+      <div class="arch-node arch-node--proposed">
+        <div class="arch-node__icon">👤</div>
+        <div class="arch-node__label">Human Review</div>
+        <div class="arch-node__sub">Before policy use</div>
+      </div>
+    </div>
+
+    <div class="grid-3 mt-lg">
+      <div class="card card--highlighted">
+        <div class="card__tag">Implemented</div>
+        <div class="card__title">Working prototype</div>
+        <div class="card__desc">
+          Python/pandas scripts validate files, reconcile totals, compute indicators.
+          FastAPI serves all results. Every chart is reproducible from uploaded CSVs.
+          26/26 unit tests pass.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card__tag">Prototype → Deploy</div>
+        <div class="card__title">Dashboard deployment</div>
+        <div class="card__desc">
+          Static frontend deployable to Vercel, Netlify, or GitHub Pages.
+          Backend deployable to Render, Railway, or any Python host.
+          CORS configured; API URL is environment-variable driven.
+        </div>
+      </div>
+      <div class="card card--warning">
+        <div class="card__tag">Proposed</div>
+        <div class="card__title">Production capabilities</div>
+        <div class="card__desc">
+          Scheduled data refresh, analytical database, role-based access,
+          audit logs, district crosswalk, trade-sector map,
+          and portal MIS/Jobs module integration.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Governance ──────────────────────────────────────────────────────────── -->
+<section class="section section--alt" id="governance">
+  <div class="container">
+    <div class="section-label">
+      <div class="section-label__num">08</div>
+      <div class="section-label__text">Governance &amp; Responsible Use</div>
+    </div>
+
+    <h2 class="section-heading mb-md">Ten controls, with prototype and production status</h2>
+
+    <div class="governance-grid">
+      <div class="governance-card">
+        <div class="governance-card__title">Public, non-personal data only</div>
+        <div class="governance-card__desc">All six files are published aggregates or business records; only aggregate sector and district figures are used.</div>
+        <div class="governance-chips"><span class="chip chip--implemented">Prototype</span></div>
+      </div>
+      <div class="governance-card">
+        <div class="governance-card__title">Provenance &amp; attribution</div>
+        <div class="governance-card__desc">Every chart and table names its file, period and publisher status. Catalogue pages are noted as unverified where applicable.</div>
+        <div class="governance-chips"><span class="chip chip--implemented">Prototype</span></div>
+      </div>
+      <div class="governance-card">
+        <div class="governance-card__title">Data-quality checks &amp; anomaly flags</div>
+        <div class="governance-card__desc">Total reconciliation and corrupted-cell detection run automatically; automated anomaly flags recommended for production.</div>
+        <div class="governance-chips"><span class="chip chip--implemented">Prototype</span><span class="chip chip--production">Production</span></div>
+      </div>
+      <div class="governance-card">
+        <div class="governance-card__title">Transparent uncertainty &amp; limits</div>
+        <div class="governance-card__desc">Each indicator states what it cannot establish; unknowns are labelled. No black-box scores are used.</div>
+        <div class="governance-chips"><span class="chip chip--implemented">Prototype</span></div>
+      </div>
+      <div class="governance-card">
+        <div class="governance-card__title">Human validation &amp; explainability</div>
+        <div class="governance-card__desc">Plain formulas; formal expert review workflow before any policy use. Officials stay in control of every decision.</div>
+        <div class="governance-chips"><span class="chip chip--implemented">Prototype</span><span class="chip chip--production">Production</span></div>
+      </div>
+      <div class="governance-card">
+        <div class="governance-card__title">Open, portable stack</div>
+        <div class="governance-card__desc">Open-source Python tools (FastAPI, pandas, NumPy) and open formats (CSV) avoid vendor lock-in.</div>
+        <div class="governance-chips"><span class="chip chip--implemented">Prototype</span></div>
+      </div>
+      <div class="governance-card">
+        <div class="governance-card__title">Role-based access</div>
+        <div class="governance-card__desc">Separate analyst, reviewer and viewer roles on internal systems.</div>
+        <div class="governance-chips"><span class="chip chip--production">Production</span></div>
+      </div>
+      <div class="governance-card">
+        <div class="governance-card__title">Audit logs &amp; versioned datasets</div>
+        <div class="governance-card__desc">Unmodified raw files, dataset versions and change logs for every scheduled refresh.</div>
+        <div class="governance-chips"><span class="chip chip--production">Production</span></div>
+      </div>
+      <div class="governance-card">
+        <div class="governance-card__title">Aggregation &amp; privacy safeguards</div>
+        <div class="governance-card__desc">Small-cell suppression and minimum group sizes if finer-grained data are ever added.</div>
+        <div class="governance-chips"><span class="chip chip--production">Production</span></div>
+      </div>
+      <div class="governance-card">
+        <div class="governance-card__title">Indian data-protection compliance</div>
+        <div class="governance-card__desc">Review against applicable law (e.g., DPDP Act 2023) before any personal data are used.</div>
+        <div class="governance-chips"><span class="chip chip--production">Production</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Policy Insights ─────────────────────────────────────────────────────── -->
+<section class="section" id="insights">
+  <div class="container">
+    <div class="section-label">
+      <div class="section-label__num">09</div>
+      <div class="section-label__text">Policy Insights &amp; Next Steps</div>
+    </div>
+
+    <h2 class="section-heading mb-xl">What officials can investigate with this system</h2>
+
+    <div class="grid-2 mb-xl">
+      <div>
+        <h3 class="subsection-heading mb-md">Observed patterns (from data)</h3>
+        <div class="card mb-md">
+          <div class="card__tag">Training Volume</div>
+          <div class="card__title">GTTC reported counts grew overall — but aggregate totals hide centre swings</div>
+          <div class="card__desc">
+            1,040 → 2,515 → 2,086 → 2,420 (total 8,061). The like-for-like cohort of 3 centres
+            fell 52.9% in 2020–21, but the aggregate fell only 17.1% as 3 new centres began reporting.
+            Mysuru holds 34.6%; top two centres hold 59.7%.
+          </div>
+          <div class="card__meta">Source: GTTC_Shortterm_Courses.csv · Verified by team calculation</div>
+        </div>
+        <div class="card mb-md">
+          <div class="card__tag">Historical Workforce</div>
+          <div class="card__title">Agriculture, forestry &amp; fishing dominated marginal work in Karnataka (2011)</div>
+          <div class="card__desc">
+            ~63.7% of Census 2011 marginal worker counts fall in agricultural categories.
+            Female share among marginal workers is higher than male share (~57% vs ~43%).
+          </div>
+          <div class="card__meta">Source: Census 2011 B-06 · Marginal workers only, 2011 boundaries</div>
+        </div>
+        <div class="card">
+          <div class="card__tag">Economic Signal</div>
+          <div class="card__title">SLSWCC approvals concentrated in Drugs/Chemicals, Engineering, Food</div>
+          <div class="card__desc">
+            307 approved units; top sectors by listed employment are Drugs/Chemicals, Engineering,
+            Food &amp; Agribusiness. 8 units listed zero employment.
+          </div>
+          <div class="card__meta">Source: SLSWCC 2021 · Listed employment ≠ realised jobs</div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="subsection-heading mb-md">Still to validate (gaps and next steps)</h3>
+        <div class="callout callout--warning mb-md">
+          <strong>No demand data linked yet.</strong> None of the available files contains
+          employer vacancy data, occupational demand forecasts, or placement outcome records.
+          An alignment indicator cannot be computed without a compatible economic demand series.
+        </div>
+        <div class="callout callout--warning mb-md">
+          <strong>Count definitions unverified.</strong> The GTTC short-term file's count unit
+          is not defined in a data dictionary. Its totals equal the "CoE" row of the passed-out
+          file, suggesting both files are from one source — not two independent verifications.
+        </div>
+        <div class="callout callout--warning mb-md">
+          <strong>District crosswalks missing.</strong> Census 2011 uses 30 districts with 2011
+          boundaries. Later files use different naming conventions. Bangalore split into multiple
+          districts; Belgaum became Belagavi. A versioned code crosswalk is required.
+        </div>
+        <div class="card card--highlighted">
+          <div class="card__tag">Recommended next steps</div>
+          <div class="card__title">Phase 2: Additional datasets needed</div>
+          <div class="card__desc">
+            ITI enrolment and trades data · Udyam/MSME registrations ·
+            Employer survey or vacancy data · Portal MIS module · Jobs module ·
+            Verified count definitions from GTTC · District code crosswalk
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="recommendation">
+      <h2>Plan skills from evidence, not assumption.</h2>
+      <p>
+        Karnataka Skill Signal shows what the available public data can say — and what it cannot.
+        Linked, validated indicators help planners ask better questions about where training
+        and the economy may diverge.
+      </p>
+      <a href="#dashboard" class="btn btn--primary" style="margin:0 auto;">Explore the evidence →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── About ───────────────────────────────────────────────────────────────── -->
+<section class="section section--alt" id="about">
+  <div class="container">
+    <div class="section-label">
+      <div class="section-label__num">10</div>
+      <div class="section-label__text">About the Project</div>
+    </div>
+
+    <h2 class="section-heading mb-xl">The team behind the project</h2>
+
+    <div class="team-grid mb-xl">
+      <div class="team-card">
+        <div class="team-card__avatar">SS</div>
+        <div class="team-card__name">Shreyas Salian</div>
+        <div class="team-card__role">Project Lead / Participant 1</div>
+        <div class="team-card__inst">M.S. Ramaiah University of Applied Sciences</div>
+      </div>
+      <div class="team-card">
+        <div class="team-card__avatar">KF</div>
+        <div class="team-card__name">Kaashvi Fatehpuria</div>
+        <div class="team-card__role">Participant 2</div>
+        <div class="team-card__inst">M.S. Ramaiah University of Applied Sciences</div>
+      </div>
+      <div class="team-card" style="border-color:var(--green-light);background:var(--green-pale);">
+        <div class="team-card__avatar" style="background:var(--olive);">VR</div>
+        <div class="team-card__name">Mr. Vishwanath K Reddy</div>
+        <div class="team-card__role">Mentor</div>
+        <div class="team-card__inst">
+          Assistant Professor, Dept. of Electronics &amp; Communication Engineering<br>
+          M.S. Ramaiah University of Applied Sciences
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <h3 class="subsection-heading mb-md">Submission</h3>
+        <div class="card">
+          <div class="card__title">KSISU Skillathon 2026</div>
+          <div class="card__desc">
+            Karnataka Skill Intelligence and Strategy Unit · October 2026<br><br>
+            <strong>AI assistance disclosure:</strong> Claude (Anthropic) assisted with
+            data analysis, slide drafting, code development and formatting. All figures
+            were computed from the cited government CSVs and verified by the team.
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 class="subsection-heading mb-md">Data Sources</h3>
+        <div class="card">
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+            <li class="caption">📄 GTTC_Shortterm_Courses.csv — GTTC, Govt. of Karnataka</li>
+            <li class="caption">📄 GTTC_Number_of_Students_Passed_2019-2021_0.csv — GTTC</li>
+            <li class="caption">📄 census_2011_ddw_b06_2900_2011.csv — RGI, India (censusindia.gov.in)</li>
+            <li class="caption">📄 TotalEnrollmentbyLevel_2020-21.csv — School Education MIS (unverified)</li>
+            <li class="caption">📄 ManagementWiseClasswiseEnrolment2018_2019_1.csv — (unverified publisher)</li>
+            <li class="caption">📄 State_Level_Single_Window_Committee_Industrydetails_2021.csv — (unverified publisher)</li>
+          </ul>
+          <div class="card__meta mt-sm">
+            Catalogue page URLs were not verifiable; publishers marked "unverified" are inferred from file content.
+            All files analysed exactly as uploaded.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ──────────────────────────────────────────────────────────────── -->
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand">Karnataka Skill Signal</div>
+        <p class="footer__desc">
+          An Explainable Labour Market Intelligence System for Evidence-Based Skill Planning.
+          Built for KSISU Skillathon 2026. A decision-support prototype — not an operational
+          government system.
+        </p>
+      </div>
+      <div>
+        <div class="footer__heading">Navigate</div>
+        <ul class="footer__links">
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#dashboard">Analytics</a></li>
+          <li><a href="#quality">Data Quality</a></li>
+          <li><a href="#methodology">Methodology</a></li>
+          <li><a href="#districts">Explorer</a></li>
+          <li><a href="#architecture">Architecture</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer__heading">Technical</div>
+        <ul class="footer__links">
+          <li><a href="http://localhost:8000/docs" target="_blank" rel="noopener">API Documentation</a></li>
+          <li><a href="http://localhost:8000/api/health" target="_blank" rel="noopener">Health Check</a></li>
+          <li><a href="http://localhost:8000/api/quality/report" target="_blank" rel="noopener">Quality Report</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__bottom">
+      <div>
+        KSISU Skillathon 2026 · Karnataka Skill Signal ·
+        M.S. Ramaiah University of Applied Sciences
+      </div>
+      <div>
+        Data: Public government datasets (see About section).
+        Figures computed by the team from cited CSVs. Not official government data.
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Pre-computed data bundle (makes the site work without a backend server) -->
+<script src="data_bundle.js"></script>
+<!-- App JS -->
+<script src="app.js"></script>
+</body>
+</html>
